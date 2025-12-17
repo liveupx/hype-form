@@ -1,0 +1,10 @@
+export default function FormSharePage() {
+  return (
+    <div className="p-6 lg:p-8">
+      <h1 className="text-2xl font-display font-bold text-stone-900 mb-8">Share Form</h1>
+      <div className="card p-6">
+        <p className="text-stone-600">Share options will appear here.</p>
+      </div>
+    </div>
+  );
+}

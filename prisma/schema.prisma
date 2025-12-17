@@ -1,0 +1,490 @@
+// ===========================================
+// HYPEFORM - Prisma Schema
+// ===========================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================
+// USER & AUTH
+// ===========================================
+
+model User {
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  password            String
+  name                String?
+  avatar              String?
+  role                Role      @default(USER)
+  plan                Plan      @default(FREE)
+  emailVerified       Boolean   @default(false)
+  
+  // Stripe
+  stripeCustomerId    String?
+  stripeSubscriptionId String?
+  planPeriodEnd       DateTime?
+  
+  // Settings
+  preferences         Json?     @default("{}")
+  lastLoginAt         DateTime?
+  
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  // Relations
+  forms               Form[]
+  submissions         Submission[]
+  integrations        Integration[]
+  webhooks            Webhook[]
+  apiKeys             ApiKey[]
+  auditLogs           AuditLog[]
+  
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  key         String    
+  prefix      String    
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@map("api_keys")
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("password_resets")
+}
+
+model EmailVerification {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("email_verifications")
+}
+
+// ===========================================
+// FORMS
+// ===========================================
+
+model Form {
+  id          String      @id @default(cuid())
+  publicId    String      @unique @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title       String      @default("Untitled Form")
+  description String?
+  status      FormStatus  @default(DRAFT)
+  
+  // Customization
+  settings    Json?       @default("{}")
+  theme       Json?       @default("{}")
+  
+  // Analytics
+  views       Int         @default(0)
+  starts      Int         @default(0)
+  
+  // SEO
+  metaTitle   String?
+  metaDescription String?
+  
+  publishedAt DateTime?
+  closedAt    DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  fields           FormField[]
+  submissions      Submission[]
+  formIntegrations FormIntegration[]
+  analyticsEvents  AnalyticsEvent[]
+
+  @@index([userId])
+  @@index([publicId])
+  @@map("forms")
+}
+
+enum FormStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+  CLOSED
+}
+
+model FormField {
+  id          String    @id @default(cuid())
+  formId      String
+  form        Form      @relation(fields: [formId], references: [id], onDelete: Cascade)
+  
+  type        FieldType
+  label       String
+  description String?
+  placeholder String?
+  required    Boolean   @default(false)
+  
+  // Field options (for select, radio, checkbox, etc.)
+  options     Json?     @default("[]")
+  
+  // Validation & settings
+  settings    Json?     @default("{}")
+  
+  // Ordering
+  order       Int       @default(0)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  answers     FieldAnswer[]
+
+  @@index([formId])
+  @@map("form_fields")
+}
+
+enum FieldType {
+  SHORT_TEXT
+  LONG_TEXT
+  EMAIL
+  PHONE
+  NUMBER
+  URL
+  DATE
+  TIME
+  DATETIME
+  SELECT
+  MULTI_SELECT
+  RADIO
+  CHECKBOX
+  FILE_UPLOAD
+  IMAGE
+  SIGNATURE
+  RATING
+  NPS
+  SCALE
+  YES_NO
+  LEGAL
+  STATEMENT
+  WELCOME
+  THANK_YOU
+  ADDRESS
+  PAYMENT
+}
+
+// ===========================================
+// SUBMISSIONS
+// ===========================================
+
+model Submission {
+  id          String           @id @default(cuid())
+  formId      String
+  form        Form             @relation(fields: [formId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  status      SubmissionStatus @default(PARTIAL)
+  
+  // Metadata
+  metadata    Json?            @default("{}")
+  ipAddress   String?
+  userAgent   String?
+  
+  // Spam detection
+  isSpam      Boolean          @default(false)
+  spamScore   Float?
+  
+  startedAt   DateTime         @default(now())
+  completedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  answers     FieldAnswer[]
+  files       SubmissionFile[]
+
+  @@index([formId])
+  @@index([status])
+  @@map("submissions")
+}
+
+enum SubmissionStatus {
+  PARTIAL
+  COMPLETED
+  SPAM
+}
+
+model FieldAnswer {
+  id           String     @id @default(cuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  fieldId      String
+  field        FormField  @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  
+  value        Json
+  
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([submissionId, fieldId])
+  @@index([submissionId])
+  @@index([fieldId])
+  @@map("field_answers")
+}
+
+model SubmissionFile {
+  id           String     @id @default(cuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  
+  fieldId      String
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  url          String
+  
+  createdAt    DateTime   @default(now())
+
+  @@index([submissionId])
+  @@map("submission_files")
+}
+
+// ===========================================
+// TEMPLATES
+// ===========================================
+
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  
+  // Template data
+  fields      Json     @default("[]")
+  settings    Json?    @default("{}")
+  theme       Json?    @default("{}")
+  
+  // Visibility
+  isPublic    Boolean  @default(true)
+  featured    Boolean  @default(false)
+  
+  // Stats
+  uses        Int      @default(0)
+  
+  thumbnail   String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([isPublic])
+  @@map("templates")
+}
+
+// ===========================================
+// INTEGRATIONS
+// ===========================================
+
+model Integration {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type        IntegrationType
+  name        String?
+  
+  // OAuth tokens & credentials (encrypted)
+  credentials Json?
+  
+  active      Boolean         @default(true)
+  
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  // Relations
+  formIntegrations FormIntegration[]
+
+  @@unique([userId, type])
+  @@map("integrations")
+}
+
+enum IntegrationType {
+  GOOGLE_SHEETS
+  SLACK
+  STRIPE
+  ZAPIER
+  WEBHOOKS
+  MAILCHIMP
+  HUBSPOT
+}
+
+model FormIntegration {
+  id            String      @id @default(cuid())
+  formId        String
+  integrationId String
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  
+  // Integration-specific settings
+  settings      Json?       @default("{}")
+  
+  active        Boolean     @default(true)
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([formId, integrationId])
+  @@map("form_integrations")
+}
+
+// ===========================================
+// WEBHOOKS
+// ===========================================
+
+model Webhook {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name      String?
+  url       String
+  secret    String
+  
+  events    String[] @default(["submission.created"])
+  headers   Json?    @default("{}")
+  
+  active    Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  logs      WebhookLog[]
+
+  @@index([userId])
+  @@map("webhooks")
+}
+
+model WebhookLog {
+  id         String   @id @default(cuid())
+  webhookId  String
+  webhook    Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  
+  event      String
+  payload    Json
+  
+  statusCode Int?
+  response   String?
+  
+  success    Boolean  @default(false)
+  error      String?
+  
+  createdAt  DateTime @default(now())
+
+  @@index([webhookId])
+  @@index([createdAt])
+  @@map("webhook_logs")
+}
+
+// ===========================================
+// ANALYTICS
+// ===========================================
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  formId    String
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  
+  type      String   // view, start, complete, abandon, field_focus, field_blur
+  
+  // Event data
+  data      Json?    @default("{}")
+  
+  // Session tracking
+  sessionId String?
+  
+  // User info
+  userAgent String?
+  ipAddress String?
+  referrer  String?
+  
+  createdAt DateTime @default(now())
+
+  @@index([formId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("analytics_events")
+}
+
+model DailyStats {
+  id          String   @id @default(cuid())
+  formId      String
+  date        DateTime @db.Date
+  
+  views       Int      @default(0)
+  starts      Int      @default(0)
+  completions Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([formId, date])
+  @@index([formId])
+  @@map("daily_stats")
+}
+
+// ===========================================
+// AUDIT LOG
+// ===========================================
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  action     String
+  resource   String
+  resourceId String?
+  
+  details    Json?    @default("{}")
+  
+  ipAddress  String?
+  userAgent  String?
+  
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
