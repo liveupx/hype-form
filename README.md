@@ -129,15 +129,32 @@ docker-compose up -d
 # Access at http://localhost:5000
 
 🔗 Integrations
-IntegrationTypeDescription📧 MailchimpEmail MarketingSync subscribers to email lists📝 NotionProductivityCreate database entries from submissions💬 DiscordCommunicationSend rich notifications to channels🔶 HubSpotCRMCreate contacts and deals automatically📊 AirtableProductivityAdd rows to Airtable bases📱 TwilioSMSSend text message notifications⚡ ZapierAutomationConnect to 5000+ apps🤖 OpenAIAIGenerate forms with AI, analyze responses📗 Google SheetsProductivitySync to spreadsheets💼 SlackCommunicationTeam notifications💳 StripePaymentsCollect payments in forms
+
+- 📧 Mailchimp: Email MarketingSync subscribers to email lists
+- 📝 Notion: ProductivityCreate database entries from submissions
+- 💬 Discord: CommunicationSend rich notifications to channels
+- 🔶 HubSpotCRM: Create contacts and deals automatically
+- 📊 Airtable: ProductivityAdd rows to Airtable bases
+- 📱 TwilioSMS: Send text message notifications
+- ⚡ Zapier Automation: Connect to 5000+ apps
+- 🤖 OpenAIAI: Generate forms with AI, analyze responses
+- 📗 Google Sheets: Productivity Sync to spreadsheets
+- 💼 Slack: Team notifications
+- 💳 Stripe: Collect payments in forms
 
 🛠️ Tech Stack
-Frontend
-TechnologyPurpose⚛️ React 18UI Framework⚡ ViteBuild Tool🎨 Tailwind CSSStyling🎭 Framer MotionAnimations🔀 React RouterRouting🐻 ZustandState Management📊 RechartsCharts🔌 Socket.io ClientReal-time
-Backend
-TechnologyPurpose🟢 Node.jsRuntime🚂 Express.jsWeb Framework🔷 PrismaORM🐘 PostgreSQLDatabase🔴 RedisCaching🔐 JWTAuthentication📡 Socket.ioReal-time📝 WinstonLogging
-DevOps
-TechnologyPurpose🐳 DockerContainerization🔄 GitHub ActionsCI/CD☁️ AWS S3File Storage
+Frontend Technology Purpose
+- ⚛️ React 18
+- UI Framework⚡ Vite
+- Build Tool🎨
+- Tailwind CSSS tyling
+- 🎭 Framer Motion Animations🔀
+- React Router Routing🐻
+- ZustandState Management 📊
+- Recharts Charts🔌
+- Socket.io Client
+- Real-time Backend
+
 
 📁 Project Structure
 hypeform/
