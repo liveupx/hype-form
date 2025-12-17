@@ -49,29 +49,29 @@
 ✨ Features
 🎨 Form Builder
 
-Drag & Drop Interface - Build forms visually with intuitive controls
-25+ Field Types - Text, email, phone, date, rating, NPS, file upload, payment, and more
-Conditional Logic - Show/hide fields based on previous answers
-Custom Themes - Match forms to your brand identity
-Mobile Responsive - Forms look great on all devices
+- Drag & Drop Interface - Build forms visually with intuitive controls
+- 25+ Field Types - Text, email, phone, date, rating, NPS, file upload, payment, and more
+- Conditional Logic - Show/hide fields based on previous answers
+- Custom Themes - Match forms to your brand identity
+- Mobile Responsive - Forms look great on all devices
 
 📊 Analytics & Insights
 
-Real-time Dashboard - Views, starts, completions, conversion rates
-Submission Tracking - Monitor responses as they come in
-AI-Powered Analysis - Sentiment analysis and theme detection
-Export Options - Download as CSV or JSON
+- Real-time Dashboard - Views, starts, completions, conversion rates
+- Submission Tracking - Monitor responses as they come in
+- AI-Powered Analysis - Sentiment analysis and theme detection
+- Export Options - Download as CSV or JSON
 
 🔗 Integrations (8 Built-in)
 
-Mailchimp - Sync to email lists
-Notion - Add to databases
-Discord - Channel notifications
-HubSpot - CRM sync
-Airtable - Spreadsheet sync
-Twilio - SMS notifications
-Zapier - Connect 5000+ apps
-OpenAI - AI form generation
+- Mailchimp - Sync to email lists
+- Notion - Add to databases
+- Discord - Channel notifications
+- HubSpot - CRM sync
+- Airtable - Spreadsheet sync
+- Twilio - SMS notifications
+- Zapier - Connect 5000+ apps
+- OpenAI - AI form generation
 
 🔐 Enterprise Ready
 
@@ -83,22 +83,22 @@ Webhook Security - HMAC signatures
 
 💳 Monetization
 
-Stripe Integration - Collect payments in forms
-Subscription Plans - Free, Pro, Enterprise tiers
-Usage-Based Billing - Pay as you grow
+- Stripe Integration - Collect payments in forms
+- Subscription Plans - Free, Pro, Enterprise tiers
+- Usage-Based Billing - Pay as you grow
 
 
 🚀 Quick Start
 Prerequisites
 
-Node.js 18+
-PostgreSQL 14+
-npm or yarn
+- Node.js 18+
+- PostgreSQL 14+
+- npm or yarn
 
 Installation
-bash# Clone the repository
-git clone https://github.com/liveupx/hype-form.git
-cd hype-form
+- bash# Clone the repository
+- git clone https://github.com/liveupx/hype-form.git
+- cd hype-form
 
 # Install dependencies
 npm install
@@ -263,22 +263,20 @@ Current Sponsors
 <p align="center">
   <strong>We're actively looking for collaborators to help build HypeForm!</strong>
 </p>
-Open Positions
-RoleSkillsStatus🎨 UI/UX DesignerFigma, Design Systems🟢 Open⚛️ Frontend DeveloperReact, TypeScript🟢 Open🔧 Backend DeveloperNode.js, PostgreSQL🟢 Open📱 Mobile DeveloperReact Native🟢 Open📝 Technical WriterDocumentation🟢 Open🧪 QA EngineerTesting, Automation🟢 Open🌍 TranslatorMultiple Languages🟢 Open📣 Developer AdvocateCommunity, Content🟢 Open
-How to Join
 
-⭐ Star this repository
-👀 Check the open issues
-💬 Comment on an issue you'd like to work on
-📧 Email us at hello@liveupx.com
+
+- ⭐ Star this repository
+- 👀 Check the open issues
+- 💬 Comment on an issue you'd like to work on
+- 📧 Email us at hello@liveupx.com
 
 What You Get
 
-🏆 Recognition as a core contributor
-📜 Certificate of contribution
-🎁 Exclusive swag (stickers, t-shirts)
-🔗 LinkedIn recommendation
-💼 Portfolio piece for your career
+- 🏆 Recognition as a core contributor
+- 📜 Certificate of contribution
+- 🎁 Exclusive swag (stickers, t-shirts)
+- 🔗 LinkedIn recommendation
+- 💼 Portfolio piece for your career
 
 
 🌟 Star History
@@ -302,10 +300,10 @@ copies of the Software...
 
 🙏 Acknowledgments
 
-Typeform - Design inspiration
-Tally - Feature inspiration
-shadcn/ui - UI components
-All our amazing contributors
+- Typeform - Design inspiration
+- Tally - Feature inspiration
+- shadcn/ui - UI components
+- All our amazing contributors
 
 
 📞 Contact & Support
