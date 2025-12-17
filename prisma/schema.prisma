@@ -347,6 +347,11 @@ enum IntegrationType {
   WEBHOOKS
   MAILCHIMP
   HUBSPOT
+  NOTION
+  DISCORD
+  AIRTABLE
+  TWILIO
+  OPENAI
 }
 
 model FormIntegration {
@@ -461,6 +466,46 @@ model DailyStats {
   @@unique([formId, date])
   @@index([formId])
   @@map("daily_stats")
+}
+
+// ===========================================
+// ZAPIER INTEGRATION
+// ===========================================
+
+model ZapierSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  event     String   // submission.created, form.published, etc.
+  targetUrl String
+  zapId     String?  // Zapier's internal ID
+  secret    String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  logs      ZapierLog[]
+
+  @@index([userId])
+  @@index([event])
+  @@map("zapier_subscriptions")
+}
+
+model ZapierLog {
+  id             String            @id @default(cuid())
+  subscriptionId String
+  subscription   ZapierSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  
+  event          String
+  payload        Json
+  statusCode     Int?
+  success        Boolean           @default(false)
+  error          String?
+  
+  createdAt      DateTime          @default(now())
+
+  @@index([subscriptionId])
+  @@index([createdAt])
+  @@map("zapier_logs")
 }
 
 // ===========================================

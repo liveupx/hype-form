@@ -27,6 +27,7 @@ const analyticsRoutes = require('./routes/analytics');
 const adminRoutes = require('./routes/admin');
 const publicRoutes = require('./routes/public');
 const uploadRoutes = require('./routes/uploads');
+const zapierRoutes = require('./routes/zapier');
 
 // Import middleware
 const { errorHandler } = require('./middleware/errorHandler');
@@ -123,6 +124,9 @@ app.use('/api/billing', billingRoutes);
 app.use('/api/templates', templateRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/uploads', uploadRoutes);
+
+// Zapier routes (uses API key auth, not JWT)
+app.use('/api/zapier', zapierRoutes);
 
 // Admin routes
 app.use('/api/admin', adminRoutes);
