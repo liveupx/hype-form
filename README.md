@@ -72,6 +72,26 @@ npm start            # Start production
 npm run db:migrate   # Run migrations
 npm run db:seed      # Seed sample data
 npm run db:studio    # Prisma Studio
+
+# 1. Unzip
+unzip hypeform-final.zip
+cd hypeform-final
+
+# 2. Create .env
+cp .env.example .env
+# Edit DATABASE_URL and JWT_SECRET
+
+# 3. Install
+npm install
+cd client && npm install && cd ..
+
+# 4. Database setup
+npx prisma generate
+npx prisma migrate dev
+npm run db:seed
+
+# 5. Run
+npm run dev
 ```
 
 ## 🔐 Demo Accounts
@@ -79,6 +99,7 @@ npm run db:studio    # Prisma Studio
 After running `npm run db:seed`:
 - **Admin:** admin@hypeform.io / admin123!
 - **User:** demo@hypeform.io / demo123!
+
 
 ## 📝 License
 
