@@ -6,19 +6,19 @@ Modern Form Builder SaaS Platform by [Liveupx.com](https://liveupx.com)
 ## 📸 Application Screenshots
 
 ### Screenshot 1
-![Screenshot 1](./upload/img/hyf1.png)
+![Screenshot 1](./uploads/img/hyf1.png)
 
 ### Screenshot 2
-![Screenshot 2](./upload/img/hyf2.png)
+![Screenshot 2](./uploads/img/hyf2.png)
 
 ### Screenshot 3
-![Screenshot 3](./upload/img/hyf3.png)
+![Screenshot 3](./uploads/img/hyf3.png)
 
 ### Screenshot 4
-![Screenshot 4](./upload/img/hyf4.png)
+![Screenshot 4](./uploads/img/hyf4.png)
 
 ### Screenshot 5
-![Screenshot 5](./upload/img/hyf5.png)
+![Screenshot 5](./uploads/img/hyf5.png)
 
 ## 🚀 Quick Start
 
